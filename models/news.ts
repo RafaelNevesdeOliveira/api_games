@@ -6,6 +6,6 @@ import {Core} from './core'
  * @types autor {String} quem escreveu a noticia
  **/
 export class News extends Core{
-    descricao!: string;
-    autor!: string;
+    descricao: string;
+    autor: string;
 }

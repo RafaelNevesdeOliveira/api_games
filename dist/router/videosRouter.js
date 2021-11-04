@@ -7,11 +7,11 @@ const videosController_1 = require("./../controller/videosController");
 require("reflect-metadata");
 const express_1 = __importDefault(require("express"));
 const tsyringe_1 = require("tsyringe");
-const videosRouter = (0, express_1.default)();
+const videosRouter = express_1.default();
 const videos = tsyringe_1.container.resolve(videosController_1.VideosController);
 //NEWS
 videosRouter
-    .route("/api/v1/videos/:page/:qtd")
+    .route("/api/v1/videos")
     .get((req, res) => {
     return videos.get(req, res);
 });

@@ -1,40 +1,64 @@
-import { INewsService } from './../contracts/iNewsService';
-import { Request, Response } from "express";
-import {injectable, inject} from 'tsyringe';
 
-@injectable()
-export class NewsController {
-
-    constructor(@inject('INewsService') private _service: INewsService) {}
-
-    // Consulta por ID
-    async get(request: Request, response: Response) {
-        try {
-            const page = request.params.page ? parseInt(request.params.page) : 1;
-            const qtd = request.params.qtd ? parseInt(request.params.qtd) : 10;
-            let result = await this._service.getAll(page, qtd);
-            response.status(200).json({ result });
-
-        } catch (error) {
-            response.status(500).json({ error: error.message || error.toString() });
-        }
+import * as HttpStatus from "http-status";
+import Helper from "../infra/helper";
+import NewsService from "../services/newsService";
+class NewsController {
+    get(request, response) {
+        NewsService.get()
+            .then((news) => Helper.sendResponse(response, HttpStatus.OK, news))
+            .catch((error) => console.error.bind(console, `Error ${error}`));
     }
 
-    // retornar uma listagem paginada
-    async getById(request: Request, response: Response) {
-        try {
-            const _id = request.params.id;
-            let result = await this._service.get(_id);
-            response.status(200).json({ result });
+    getById(request, response) {
+        const _id = request.params.id;
 
-        } catch (error) {
-            response.status(500).json({ error: error.message || error.toString() });
-        }
+        NewsService.getById(_id)
+            .then((news) => Helper.sendResponse(response, HttpStatus.OK, news))
+            .catch((error) => console.error.bind(console, `Error ${error}`));
+    }
+
+    create(request, response) {
+        let modelApi = request.body;
+
+        NewsService.create(modelApi)
+            .then((news) =>
+                Helper.sendResponse(
+                    response,
+                    HttpStatus.OK,
+                    "Dado cadastrado com sucesso"
+                )
+            )
+            .catch((error) => console.error.bind(console, `Error ${error}`));
+    }
+
+    update(request, response) {
+        const _id = request.params.id;
+        let news = request.body;
+
+        NewsService.update(_id, news)
+            .then((news) =>
+                Helper.sendResponse(
+                    response,
+                    HttpStatus.OK,
+                    `${news.titulo} foi atualizado com sucesso`
+                )
+            )
+            .catch((error) => console.error.bind(console, `Error ${error}`));
+    }
+
+    delete(request, response) {
+        const _id = request.params.id;
+
+        NewsService.delete(_id)
+            .then((news) =>
+                Helper.sendResponse(
+                    response,
+                    HttpStatus.OK,
+                    `${news._id}Dado deletado`
+                )
+            )
+            .catch((error) => console.error.bind(console, `Error ${error}`));
     }
 }
 
-/**
-OBS
-try : consegue recuperar erros que possam ocorrer no código;
-catch : faz o tratamento dos erros que aconteceram, retorna uma exception que pode ser tratada e retornada no response.
-**/ 
+export default new NewsController();

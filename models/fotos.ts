@@ -7,7 +7,7 @@
  * @types legenda <Array> - legenda da foto
  **/
  export class Fotos{
-    thumb!: string;
-    thumbNail!: string;
-    legenda!: string;
+    thumb: string;
+    thumbNail: string;
+    legenda: string;
 }

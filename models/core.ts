@@ -11,11 +11,11 @@ import { Document } from 'mongoose';
  * @type ativo {Boolean} status
  */
 export abstract class Core extends Document {
-    titulo!: string;
-    sinopse!: string;
-    imagem!: string;
-    dataPublicacao!: Date;
-    tags!: string;
-    link!: string;
-    ativo!: boolean;
+    titulo: string;
+    sinopse: string;
+    imagem: string;
+    dataPublicacao: Date;
+    tags: string;
+    link: string;
+    ativo: boolean;
 }

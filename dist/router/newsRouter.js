@@ -7,10 +7,10 @@ require("reflect-metadata");
 const express_1 = __importDefault(require("express"));
 const tsyringe_1 = require("tsyringe");
 const newsController_1 = require("../controller/newsController");
-const newsRouter = (0, express_1.default)();
+const newsRouter = express_1.default();
 const news = tsyringe_1.container.resolve(newsController_1.NewsController);
 newsRouter
-    .route("/api/v1/news/:page/:qtd")
+    .route("/api/v1/news")
     .get((req, res) => {
     return news.get(req, res);
 });

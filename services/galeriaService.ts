@@ -1,25 +1,19 @@
-import { IGaleriaService } from './../contracts/iGaleriaService';
-import { Galeria } from './../models/galeria';
 import { GaleriaRepository } from './../repository/galeriaRepository';
-import { Result } from "../infra/result";
-
-
-export class GaleriaService implements IGaleriaService {
-
-  async get(_id: string): Promise<Galeria> {
-    let result = await GaleriaRepository.findById(_id);
-    return result;
+class GaleriaService{
+  get() {
+    return GaleriaRepository.find({});
   }
-
-  async getAll(page: number, qtd: number): Promise<Result<Galeria>> {
-    
-    let result = new Result<Galeria>();
-    result.Page = page;
-    result.Qtd = qtd;
-    result.Total = await GaleriaRepository.count({});
-    result.Data = await GaleriaRepository.find({})
-      .skip(page * qtd - qtd)
-      .limit(qtd);
-    return result;
+  getById(_id) {
+    return GaleriaRepository.findById(_id);
+  }
+  create(galeria) {
+    return GaleriaRepository.create(galeria);
+  }
+  update(_id, galeria) {
+    return GaleriaRepository.findByIdAndUpdate(_id, galeria);
+  }
+  delete(_id) {
+    return GaleriaRepository.findByIdAndRemove(_id);
   }
 }
+export default new GaleriaService();

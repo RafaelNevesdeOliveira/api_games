@@ -6,6 +6,6 @@ import { Core} from './core'
  * @types Duração {string} - tempo de vídeo
  **/
 export class Videos extends Core{
-    url!: string;
-    duracao!: string;
+    url: string;
+    duracao: string;
 }

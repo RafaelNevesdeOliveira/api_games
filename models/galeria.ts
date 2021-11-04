@@ -6,5 +6,5 @@ import {Fotos} from './fotos';
  * @types fotos <Array> - Model de fotos
  **/
 export class Galeria extends Core{
-    fotos!: Array<Fotos>;
+    fotos: Array<Fotos>;
 }

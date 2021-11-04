@@ -1,39 +1,63 @@
-import { inject, injectable } from 'tsyringe';
-import { IGaleriaService } from './../contracts/iGaleriaService';
-import { Request, Response } from "express";
-
-@injectable()
-export class GaleriaController {
-
-    constructor(@inject('IGaleriaService')private _service: IGaleriaService) {}
-
-    // Consulta por ID
-    async get(request: Request, response: Response) {
-        try {
-            const page = request.params.page ? parseInt(request.params.page) : 1;
-            const qtd = request.params.qtd ? parseInt(request.params.qtd) : 10;
-            let result = await this._service.getAll(page, qtd);
-            response.status(200).json({ result });
-
-        } catch (error) {
-            response.status(500).json({ error: error.message || error.toString() });
-        }
+import * as HttpStatus from "http-status";
+import Helper from "../infra/helper";
+import GaleriaService from '../services/galeriaService';
+class GaleriaController {
+    get(request, response) {
+        GaleriaService.get()
+            .then((galeria) => Helper.sendResponse(response, HttpStatus.OK, galeria))
+            .catch((error) => console.error.bind(console, `Error ${error}`));
     }
 
-    // retornar uma listagem paginada
-    async getById(request: Request, response: Response) {
-        try {
-            const _id = request.params.id;
-            let result = await this._service.get(_id);
-            response.status(200).json({ result });
+    getById(request, response) {
+        const _id = request.params.id;
 
-        } catch (error) {
-            response.status(500).json({ error: error.message || error.toString() });
-        }
+        GaleriaService.getById(_id)
+            .then((galeria) => Helper.sendResponse(response, HttpStatus.OK, galeria))
+            .catch((error) => console.error.bind(console, `Error ${error}`));
+    }
+
+    create(request, response) {
+        let modelApi = request.body;
+
+        GaleriaService.create(modelApi)
+            .then((galeria) =>
+                Helper.sendResponse(
+                    response,
+                    HttpStatus.OK,
+                    "Dado cadastrado com sucesso"
+                )
+            )
+            .catch((error) => console.error.bind(console, `Error ${error}`));
+    }
+
+    update(request, response) {
+        const _id = request.params.id;
+        let galeria = request.body;
+
+        GaleriaService.update(_id, galeria)
+            .then((galeria) =>
+                Helper.sendResponse(
+                    response,
+                    HttpStatus.OK,
+                    `${galeria.titulo} foi atualizado com sucesso`
+                )
+            )
+            .catch((error) => console.error.bind(console, `Error ${error}`));
+    }
+
+    delete(request, response) {
+        const _id = request.params.id;
+
+        GaleriaService.delete(_id)
+            .then((galeria) =>
+                Helper.sendResponse(
+                    response,
+                    HttpStatus.OK,
+                    `${galeria._id}Dado deletado`
+                )
+            )
+            .catch((error) => console.error.bind(console, `Error ${error}`));
     }
 }
-/**
-OBS
-try : consegue recuperar erros que possam ocorrer no código;
-catch : faz o tratamento dos erros que aconteceram, retorna uma exception que pode ser tratada e retornada no response.
-**/ 
+
+export default new GaleriaController();

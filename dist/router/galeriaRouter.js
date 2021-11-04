@@ -7,10 +7,10 @@ const galeriaController_1 = require("./../controller/galeriaController");
 require("reflect-metadata");
 const express_1 = __importDefault(require("express"));
 const tsyringe_1 = require("tsyringe");
-const galeriaRouter = (0, express_1.default)();
+const galeriaRouter = express_1.default();
 const galeria = tsyringe_1.container.resolve(galeriaController_1.GaleriaController);
 galeriaRouter
-    .route("/api/v1/galeria/:page/:qtd")
+    .route("/api/v1/galeria")
     .get((req, res) => {
     return galeria.get(req, res);
 });
