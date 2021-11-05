@@ -9,7 +9,8 @@ const mongoose_1 = __importDefault(require("mongoose"));
  */
 class Database {
     constructor() {
-        this.DB_URL = "mongodb://localhost:27017/db_games";
+        // private DB_URL = "mongodb://localhost:27017/db_games";
+        this.DB_URL = "mongodb://link-db/db_games";
     }
     createConnection() {
         mongoose_1.default.connect(this.DB_URL);

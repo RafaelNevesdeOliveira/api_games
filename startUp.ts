@@ -7,35 +7,35 @@ import GaleriaController from './controller/galeriaController'
 import VideosController from './controller/videosController'
 class StartUp {
 
-    public app: Application;
-    private _db: database = new database();
+  public app: Application;
+  private _db: database = new database();
 
-    constructor() {
-        this.app = express();
-        this._db.createConnection();
-        this.middler();
-        this.routes();
+  constructor() {
+    this.app = express();
+    this._db.createConnection();
+    this.middler();
+    this.routes();
+  }
+
+  enableCors() {
+    const options: cors.CorsOptions = {
+      methods: "GET, OPTIONS, PUT, POST, DELETE",
+      origin: "*"
     }
 
-    enableCors(){
-        const options: cors.CorsOptions={
-          methods: "GET, OPTIONS, PUT, POST, DELETE",
-          origin: "*"
-        }
-    
-        this.app.use(cors(options))
-      }
+    this.app.use(cors(options))
+  }
 
-    middler() {
-        this.enableCors()
-        this.app.use(express.json());
-        this.app.use(express.urlencoded({ extended: false }));
-      }
+  middler() {
+    this.enableCors()
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: false }));
+  }
 
-    routes() {
-        this.app.route("/").get((req, res) => {
-            res.send({ versao: "0.0.2" });
-        });
+  routes() {
+    this.app.route("/").get((req, res) => {
+      res.send({ versao: "0.0.2" });
+    });
 
     // News
     this.app.route("/api/v1/news/").get(NewsController.get)
@@ -57,7 +57,7 @@ class StartUp {
     this.app.route("/api/v1/videos").post(VideosController.create)
     this.app.route("/api/v1/videos/:id").put(VideosController.update)
     this.app.route("/api/v1/videos/:id").delete(VideosController.delete)
-    }
+  }
 }
 
 export default new StartUp();
